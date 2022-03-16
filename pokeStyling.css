@@ -1,0 +1,30 @@
+body {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #888888;
+    background-color: peachpuff;
+}
+
+main {
+    background-color: white;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+#getData {
+    padding: 20px;
+    border-radius: 20px;
+    color: white;
+    background-color: #fb7;
+}
+
+button:hover {
+    background-color: cadetblue;
+}
+
+button:active {
+    border: 2px solid #888888;
+}
+
+* {
+    text-align: center;
+}
