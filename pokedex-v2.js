@@ -31,6 +31,8 @@ const apiURL = 'http://pokeapi.co/api/v2/';
 var allPokemonArr = [];
 
 
+console.log("Changes applied");
+
 /*
 Monday we took care of events by saying something like button.onclick = doSomething()
 Instead we pass in the method type, as well as a function that we will use as a *callback*
