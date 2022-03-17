@@ -32,6 +32,7 @@ var allPokemonArr = [];
 
 
 console.log("Changes applied");
+console.log("is this working?");
 
 /*
 Monday we took care of events by saying something like button.onclick = doSomething()
