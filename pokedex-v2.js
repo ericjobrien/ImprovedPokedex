@@ -27,8 +27,9 @@ var dataSection = document.getElementById('data');
 var listSection = document.getElementById('list');
 var nameInputBox = document.getElementById('nameInput');
 var nameButton = document.getElementById('getName');
-
 const apiURL = 'http://pokeapi.co/api/v2/';
+var allPokemonArr = [];
+
 
 /*
 Monday we took care of events by saying something like button.onclick = doSomething()
@@ -40,119 +41,114 @@ Meaning: a callback function is a function passed in as a parameter that will be
 
 getDataButton.addEventListener('click', generateData);
 
-/*
-async function:
+/*async function:
 meaning, asynchronous function:
-it allows for asynchronous execution while waiting for an await
-*/
-
+it allows for asynchronous execution while waiting for an await*/
 async function generateData() {
     /*
         rudimentary DOM manipulation:
-        DOM - Document Object Model:
-        A tree representation of the structure of the page
+        DOM?
+        Document Object Model
+        it's a tree representation of the structure of the page
     */
-    // dataSection.innerHTML = 'PokePlackeholder';
+    /*dataSection.innerHTML = 'PokePlaceholder';*/
     let userInput = dataInputBox.value;
     /*
-    Await
+    *Await*
     (wait)
     for a
-    Promise
+    *Promise*
     (some variable that will eventually be filled)
     */
-    
-
-
-    let response = await fetch(apiURL + 'pokemon/' + userInput);
+    let response = await fetch (apiURL + 'pokemon/' + userInput);
     console.log(response);
-
-    if(response.status === 200) {
+    if(response.status === 200){
         let data = await response.json();
         console.log(data);
         populateData(data);
-    } else {
-        dataSection.innerHTML = 'It got away!';
+    }else{
+        dataSection.innerHTML = 'It Got Away!';
     }
 }
-
 function populateData(pokemonObject) {
-    
     /*
     Clear the datasection so that we don't have multiple bulbasaurs
     */
-    dataSection.innerHTML = '';
-
-    //create a nameTag
+    dataSection.innerHTML='';
+    /*
+    Create a nametag
+    */
     let nameTag = document.createElement('h3');
     nameTag.innerHTML = pokemonObject.name;
     dataSection.appendChild(nameTag);
-    for(let spriteNum in pokemonObject.sprites) {
+    for(let spriteNum in pokemonObject.sprites){
         /*
-            Because JS doesn't ever caremuch about types,
+            Because JS doesn't ever care much about types,
             every variable is technically equivalent to a boolean
             what this means is certain variables are false and certain are true
             generally this follows a sensible pattern:
-            null, 0 and '' are false
+            null, 0, and '' are false
             most everything else is true
             These are called 'truthy' and 'falsy' values
-
-            This stems from a larger understanding that JS is loosely typed
-            as opposed to Java, which is strongly typed
+            This stems from a larger understanding that JS is *loosely types*
+            as opposed to Java, *strongly typed*
         */
         if(pokemonObject.sprites[spriteNum] && (typeof pokemonObject.sprites[spriteNum] != 'object')) {
             let spriteImg = document.createElement('img');
             spriteImg.src = pokemonObject.sprites[spriteNum];
             dataSection.appendChild(spriteImg);
         }
-      
-    }
-
-    let abilitiesList = document.createElement('ul');
+        /*
+        ul: unordered list
+        ol: ordered list
+        both contain 'li' (list items) as children
+        */
         
-    for(let abilityNum in pokemonObject.abilities) {
-        let ability = document.createElement('li');
-        ability.innerHTML = pokemonObject.abilities[abilityNum].ability.name;
-        abilitiesList.appendChild(ability);
     }
-
-    dataSection.appendChild(abilitiesList);
-
-}
-
-async function generateList () {
-     
-      
-        let response = await fetch(apiURL + 'pokemon?limit=151');
-        console.log(response);
-    
-        if(response.status === 200) {
-            let data = await response.json();
-            console.log(data);
-            for(let pokemon of data.results){
-                allPokemonArr.push(pokemon);
-            }
-            populateList();
-        } else {
-            dataSection.innerHTML = 'It got away!';
+    let abilitiesList = document.createElement('ul');
+        for(let abilityNum in pokemonObject.abilities){
+            let ability = document.createElement('li');
+            ability.innerHTML = pokemonObject.abilities[abilityNum].ability.name;
+            abilitiesList.appendChild(ability);
         }
-    
+        dataSection.appendChild(abilitiesList);
+
 }
 
-function populateList(populateList) {
+nameButton.addEventListener('click', populateList);
+
+async function generateList() {
+    let response = await fetch (apiURL + 'pokemon?limit=151');
+    console.log(response);
+    if(response.status === 200){
+        let data = await response.json();
+        console.log(data);
+        for(let pokemon of data.results){
+            allPokemonArr.push(pokemon);
+        }
+    }else{
+        dataSection.innerHTML = 'It Got Away!';
+    }
+}
+
+function populateList(){
     listSection.innerHTML = '';
     pokemonName = nameInputBox.value;
-    document.createElement('ol');
 
+    /*
+        we are passing in a function to methods like filter, map, or sort
+        that determine what to do with any particular element
+    */
     pokeList = allPokemonArr.filter(pokemon => pokemon.name.includes(pokemonName));
-    pokeList = pokeList.sort();
-    
-    for(let pokemon of pokemonListObject.results) {
-        console.log(pokemon);
 
+    pokemonList = document.createElement('ol');
+    for(let pokemon of pokeList){
+        console.log(pokemon);
         pokemonListItem = document.createElement('li');
+        pokemonListItem.innerHTML = pokemon.name;
         pokemonList.appendChild(pokemonListItem);
     }
-
     listSection.appendChild(pokemonList);
 }
+
+generateList();
